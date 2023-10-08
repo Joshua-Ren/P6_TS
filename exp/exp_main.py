@@ -142,7 +142,7 @@ class Exp_Main(Exp_Basic):
                 loss = criterion(outputs, batch_y)
                 train_loss.append(loss.item())
 
-                if (i + 1) % 100 == 0:
+                if (i + 1) % 10 == 0:
                     print("\titers: {0}, epoch: {1} | loss: {2:.7f}".format(i + 1, epoch + 1, loss.item()))
                     wandb.log({'Train_loss':loss.item()})
                     speed = (time.time() - time_now) / iter_count
@@ -150,6 +150,10 @@ class Exp_Main(Exp_Basic):
                     print('\tspeed: {:.4f}s/iter; left time: {:.4f}s'.format(speed, left_time))
                     iter_count = 0
                     time_now = time.time()
+                    vali_loss = self.vali(vali_data, vali_loader, criterion)
+                    test_loss = self.vali(test_data, test_loader, criterion)
+                    wandb.log({'Valid_loss':vali_loss})
+                    wandb.log({'Test_loss':test_loss})
 
                 if self.args.use_amp:
                     scaler.scale(loss).backward()
@@ -163,10 +167,10 @@ class Exp_Main(Exp_Basic):
             train_loss = np.average(train_loss)
             vali_loss = self.vali(vali_data, vali_loader, criterion)
             test_loss = self.vali(test_data, test_loader, criterion)
-            wandb.log({'Valid_loss':vali_loss})
-            wandb.log({'Test_loss':test_loss})
-            print("Epoch: {0}, Steps: {1} | Train Loss: {2:.7f} Vali Loss: {3:.7f} Test Loss: {4:.7f}".format(
-                epoch + 1, train_steps, train_loss, vali_loss, test_loss))
+            #wandb.log({'Valid_loss':vali_loss})
+            #wandb.log({'Test_loss':test_loss})
+            #print("Epoch: {0}, Steps: {1} | Train Loss: {2:.7f} Vali Loss: {3:.7f} Test Loss: {4:.7f}".format(
+            #    epoch + 1, train_steps, train_loss, vali_loss, test_loss))
             early_stopping(vali_loss, self.model, path)
             if early_stopping.early_stop:
                 print("Early stopping")

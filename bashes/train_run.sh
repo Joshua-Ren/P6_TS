@@ -26,14 +26,14 @@ cd /home/joshua52/projects/def-dsuth/joshua52/P6_TS
 srun python /home/joshua52/projects/def-dsuth/joshua52/P6_TS/run.py \
   --is_training 1 \
   --root_path ./dataset/ETT-small/ \
-  --data_path ETTm1.csv \
-  --model_id ETTm1_96_24 \
+  --data_path ETTh1.csv \
+  --model_id ETTh1_96_168 \
   --model Autoformer \
-  --data ETTm1 \
+  --data ETTh1 \
   --features M \
   --seq_len 96 \
   --label_len 48 \
-  --pred_len 24 \
+  --pred_len 168 \
   --e_layers 2 \
   --d_layers 1 \
   --factor 3 \
@@ -41,6 +41,4 @@ srun python /home/joshua52/projects/def-dsuth/joshua52/P6_TS/run.py \
   --dec_in 7 \
   --c_out 7 \
   --des 'Exp' \
-  --freq 't' \
-  --itr 1 \
-  --train_epochs 10
+  --itr 1
